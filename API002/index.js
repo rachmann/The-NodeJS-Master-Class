@@ -2,9 +2,11 @@
 
 // dependency
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const stringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
+var fs = require('fs');
 
 function getQueryVariable(queryStringObject) {
     var query = window.location.search.substring(1);
@@ -18,8 +20,43 @@ function getQueryVariable(queryStringObject) {
     console.log('Query variable %s not found', variable);
 }
 
-// respond to all requests with a string
-const server = http.createServer(function(req,res){
+// instantiating http server
+const httpServer = http.createServer(function(req,res){
+
+    unifiedServer(req,res);
+
+});
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+// start http server and listen on dynamically defined port from config
+httpServer.listen(config.httpPort,function(){
+
+    console.log(`the http server is listening on port ${config.httpPort} in ${config.envName} mode`);
+
+});
+
+var httpsServerOptions = {
+    // key and cert are quired for encryption - read syncronously as we need them immediately
+    'key' : fs.readFileSync('./https/key.pem'),
+    'cert' : fs.readFileSync('./https/cert.pem')
+};
+const httpsServer = https.createServer(httpsServerOptions, function(req,res){
+
+    unifiedServer(req,res);
+
+});
+
+// start https server and listen on dynamically defined port from config
+httpsServer.listen(config.httpsPort,function(){
+
+    console.log(`the https server is listening on port ${config.httpsPort} in ${config.envName} mode`);
+
+});
+
+// all the server logic for both http and https servers
+const unifiedServer = function(req, res){
 
     //get url and parse it
     var parsedUrl = url.parse(req.url,true);
@@ -94,18 +131,8 @@ const server = http.createServer(function(req,res){
         });
 
     });
-    
-});
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-// start server and listen on dynamically defined port from config
-server.listen(config.port,function(){
-
-    console.log(`the server is listening on port ${config.port} in ${config.envName} mode`);
-
-});
-
+};
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 // define the handlers

@@ -1,7 +1,8 @@
 ////////////////////////////////////////////////////////////////////
 //
 // Main file for API
-// Created : Sept
+// Created : Sept 15, 2020
+//
 // TODO: refactor file into components
 
 ////////////////////////////////////////////////////////////////////
@@ -11,11 +12,58 @@ const https = require("https");
 const url = require("url");
 const stringDecoder = require("string_decoder").StringDecoder;
 const config = require("./config");
-var fs = require("fs");
+const fs = require("fs");
+const _data = require("./lib/data");
 var currentFunction = "request";
 
 // End of Dependencies
 ////////////////////////////////////////////////////////////////////
+
+// TEST SUITE
+//
+// test create
+// function doCreate() {
+//   _data.create(
+//     "test",
+//     "newSampleFile",
+//     '{"test":[{"foo":"bar", "hoge":"piyo", "ham":"spam"}]}',
+//     function (err) {
+//       console.log("test write fail:", err);
+//     }
+//   );
+// }
+
+// // test read
+// function doRead() {
+//   _data.read("test", "newSampleFile", function (err, data) {
+//     console.log("test read fail:".err);
+//     console.log("  test the data read ", data);
+//   });
+// }
+
+// // test update
+// function doUpdate() {
+//   _data.update(
+//     "test",
+//     "newSampleFile",
+//     '{"test":[{"ham":"jam", "marco":"polo"}]}',
+//     function (err) {
+//       console.log("test update fail:", err);
+//     }
+//   );
+// }
+
+// // test delete
+// function doDelete() {
+//   _data.delete("test", "newSampleFile", function (err) {
+//     console.log("test delete fail:", err);
+//   });
+// }
+
+// setTimeout(doCreate, 1100);
+// setTimeout(doRead, 1100);
+// setTimeout(doUpdate, 1100);
+// setTimeout(doDelete, 1100);
 
 ////////////////////////////////////////////////////////////////////
 // Utility functions
